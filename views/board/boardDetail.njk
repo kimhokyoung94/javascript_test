@@ -1,0 +1,55 @@
+{% extends "layout.njk" %}
+{% block contents %}
+
+  <section>
+    <div class='main-header'>
+      <h1>{{board.title}}</h1>
+      <div>
+
+        <a href="/board/{{board.id}}/edit" class="btn btn-outline-success">
+          글 수정
+        </a>
+        <form method="POST" action='/board/{{board.id}}/delete'>
+          <button type='submit' class="btn btn-outline-danger">
+            글 삭제
+          </button>
+        </form>
+      </div>
+    </div>
+    <hr/>
+    <div class="main-content">
+      {{board.content}}
+    </div>
+    <div>
+
+      <textarea id="comment_text" class="form-control" name="content" rows="3"></textarea>
+      <button id="comment_submit_btn" type='submit' class="btn btn-dark">
+        게시물 작성
+      </div>
+
+    </section>
+
+  </div>
+{% endblock contents %}
+
+{% block extra_scripts%}
+  <script>
+    $('#comment_submit_btn').click(function (e) {
+      const commentText = $('#comment_text').val();
+      const data = {
+        comment: commentText
+      }
+      $.ajax({
+        data: data,
+        url: 'http://localhost:3000/board/{{board.id}}/comment',
+        type: 'POST',
+        success: function (data) {
+          console.log(data);
+        },
+        error: function (err) {
+          console.error(err);
+        }
+      })
+    });
+  </script>
+{% endblock extra_scripts%}
